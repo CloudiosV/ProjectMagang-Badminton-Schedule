@@ -1,7 +1,44 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\JadwalController;
+use App\Http\Controllers\LapanganController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware('guest')->group(function () {
+    Route::get('/', [AuthController::class, 'loginForm'])->name('home');
+    Route::get('/login', [AuthController::class, 'loginForm'])->name('loginForm');
+    Route::post('/login', [AuthController::class, 'login'])->name('login');
+    
+    Route::get('/register', [AuthController::class, 'registerForm'])->name('registerForm');
+    Route::post('/register', [AuthController::class, 'register'])->name('register');
+});
+
+Route::post('/logout', [AuthController::class, 'logout'])
+    ->middleware('auth')
+    ->name('logout');
+
+Route::middleware('auth')->group(function () {
+    
+    Route::prefix('/lapangan')->name('lapangan.')->group(function (){
+        Route::get('/', [LapanganController::class, 'index'])->name('index');
+        Route::get('/create', [LapanganController::class, 'create'])->name('create');
+        Route::get('/{lapangan}/edit', [LapanganController::class, 'edit'])->name('edit');
+        Route::get('/{lapangan}', [LapanganController::class, 'show'])->name('show');
+
+        Route::post('/', [LapanganController::class, 'store'])->name('store');
+        Route::put('/{lapangan}', [LapanganController::class, 'update'])->name('update');
+        Route::delete('/{lapangan}', [LapanganController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('/lapangan/{lapangan}')->group(function () {
+        Route::name('jadwal.')->group(function () {
+            Route::get('/jadwal/create', [JadwalController::class, 'create'])->name('create');
+            Route::get('/jadwal/{jadwal}/edit', [JadwalController::class, 'edit'])->name('edit');
+            
+            Route::post('/jadwal', [JadwalController::class, 'store'])->name('store');
+            Route::put('/jadwal/{jadwal}', [JadwalController::class, 'update'])->name('update');
+            Route::delete('/jadwal/{jadwal}', [JadwalController::class, 'destroy'])->name('destroy');
+        });
+    });
 });
