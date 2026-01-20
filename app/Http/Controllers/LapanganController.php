@@ -11,6 +11,13 @@ class LapanganController extends Controller
     public function index()
     {
         $lapangan = Lapangan::paginate(5);
+
+        // return response()->json([
+        //     'success' => true,
+        //     'message' => 'Data lapangan berhasil dikirim',
+        //     'data' => $lapangan
+        // ], 200);
+        
         return view('lapangan.index', [
             'lapangan'=> $lapangan
         ]);
@@ -28,7 +35,13 @@ class LapanganController extends Controller
             'tanggal' => 'date|required'
         ]);
 
-        Lapangan::create($validatedRequest);
+        $data = Lapangan::create($validatedRequest);
+
+        // return response()->json([
+        //     'success' => true,
+        //     'message' => 'Lapangan berhasil dibuat',
+        //     'data' => $data
+        // ], 201);
 
         return redirect()->route('Lapangan.index')->with('success', 'Lapangan Berhasil ditambahkan');
     }
@@ -36,6 +49,15 @@ class LapanganController extends Controller
     public function show(Lapangan $lapangan)
     {
         $jadwal = $lapangan->jadwal()->with('user')->orderBy('jam_mulai')->paginate(5);
+
+        // return response()->json([
+        //     'success' => true,
+        //     'message' => 'Data lapangan dan jadwal berhasil dikirim',
+        //     'data' => [
+        //         'lapangan' => $lapangan,
+        //         'jadwal' => $jadwal
+        //     ]
+        // ], 200);
 
         return view('Lapangan.show', [
             'jadwal' => $jadwal,
@@ -45,6 +67,12 @@ class LapanganController extends Controller
 
     public function edit(Lapangan $lapangan)
     {
+        // return response()->json([
+        //     'success'=> true,
+        //     'message' => 'Data Lapangan berhasil dikirim ke halaman edit',
+        //     'data' => $lapangan
+        // ], 200);
+
         return view('Lapangan.edit', [
             'lapangan' => $lapangan
         ]);
@@ -59,12 +87,24 @@ class LapanganController extends Controller
 
         $lapangan->update($validatedRequest);
 
+        // return response()->json([
+        //     'success' => true,
+        //     'message' => 'Lapangan berhasil diubah',
+        //     'data' => $lapangan 
+        // ], 200);
+
         return redirect()->route('Lapangan.index')->with('success', 'Lapangan Berhasil diubah');
     }
 
     public function destroy(Lapangan $lapangan)
     {
         $lapangan->delete();
+
+        // return response()->json([
+        //     'success' => true,
+        //     'message' => 'Lapangan berhasil dihapus',
+        //     'data' => $lapangan
+        // ], 200);
 
         return redirect()->route('Lapangan.index')->with('success', 'Berhasil menghapus lapangan');
     }
