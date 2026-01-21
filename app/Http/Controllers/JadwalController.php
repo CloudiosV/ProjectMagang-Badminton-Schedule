@@ -11,6 +11,10 @@ class JadwalController extends Controller
 {
     public function create(Lapangan $lapangan)
     {
+        if(!auth()->user()->can('create jadwal')){
+            abort(403, 'Unauthorized action.');
+        }
+        
         return view('jadwal.create', [
             'lapangan' => $lapangan
         ]);
@@ -18,6 +22,10 @@ class JadwalController extends Controller
 
     public function store(Lapangan $lapangan, Request $request)
     {
+        if(!auth()->user()->can('create jadwal')){
+            abort(403, 'Unauthorized action.');
+        }
+        
         // $user = Auth::user();
     
         $validatedRequest = $request->validate([
@@ -36,6 +44,10 @@ class JadwalController extends Controller
 
     public function edit(Lapangan $lapangan, Jadwal $jadwal)
     {
+        if(!auth()->user()->can('edit jadwal')){
+            abort(403, 'Unauthorized action.');
+        }
+        
         return view('jadwal.edit', [
             'lapangan' => $lapangan,
             'jadwal' => $jadwal
@@ -44,6 +56,10 @@ class JadwalController extends Controller
 
     public function update(Lapangan $lapangan, Jadwal $jadwal, Request $request)
     {
+        if(!auth()->user()->can('edit jadwal')){
+            abort(403, 'Unauthorized action.');
+        }
+        
         $validatedRequest = $request->validate([
             'jam_mulai' => 'date_format:H:i|required',
             'jam_berhenti' => 'date_format:H:i|required'
@@ -56,6 +72,10 @@ class JadwalController extends Controller
 
     public function destroy(Lapangan $lapangan, Jadwal $jadwal)
     {
+        if(!auth()->user()->can('delete jadwal')){
+            abort(403, 'Unauthorized action.');
+        }
+        
         $jadwal->delete();
         return redirect()->route('lapangan.show', $lapangan)->with('success', 'Jadwal berhasil dihapus!');
     } 
