@@ -9,6 +9,7 @@
     @auth
         @if(auth()->user()->role == 'admin')
             <a href="{{ route('lapangan.create') }}" class="btn btn-primary mb-2">Tambah List</a>
+            <a href="{{ route('users.index') }}" class="btn btn-primary mb-2">Daftar User</a>
         @endif
     @endauth
     

@@ -6,7 +6,7 @@
 
     @section('header', 'Tambah Lapangan')
 
-    <form action="{{ route('lapangan   .store') }}" method="POST">
+    <form action="{{ route('lapangan.store') }}" method="POST">
         @csrf
 
         <div class="mb-3">
