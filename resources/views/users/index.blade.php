@@ -24,7 +24,7 @@
                 <td>No</td>
                 <td>Nama User</td>
                 <td>Email</td>
-                <td>Role</td>
+                <td>Roles</td>
                 <td>Aksi</td>
             </tr>
         </thead>
@@ -35,14 +35,20 @@
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $user->nama }}</td>
                     <td>{{ $user->email }}</td>
-                    <td>{{ $user->role }}</td>
+                    <td>
+                        @foreach($user->roles as $role)
+                            <span class="badge bg-primary">{{ $role->name }}</span>
+                        @endforeach
+                    </td>
                     <td class="d-flex gap-1 justify-content-center">
                         <a href="{{ route('users.edit', $user) }}" class="btn btn-sm btn-warning">Ubah</a>
-                        <form action="{{ route('users.destroy', $user) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" onclick="return confirm('Anda Yakin Hapus User Ini?')" class="btn btn-sm btn-danger">Hapus</button>
-                        </form>
+                        @can('delete users')
+                            <form action="{{ route('users.destroy', $user) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" onclick="return confirm('Anda Yakin Hapus User Ini?')" class="btn btn-sm btn-danger">Hapus</button>
+                            </form>
+                        @endcan
                     </td>
                 </tr>
             @endforeach

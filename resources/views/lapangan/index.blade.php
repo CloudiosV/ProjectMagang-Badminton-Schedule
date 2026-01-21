@@ -6,12 +6,13 @@
 
     @section('header', 'Daftar Lapangan')
 
-    @auth
-        @if(auth()->user()->role == 'admin')
-            <a href="{{ route('lapangan.create') }}" class="btn btn-primary mb-2">Tambah List</a>
-            <a href="{{ route('users.index') }}" class="btn btn-primary mb-2">Daftar User</a>
-        @endif
-    @endauth
+    @can('create lapangan')
+        <a href="{{ route('lapangan.create') }}" class="btn btn-primary mb-2">Tambah Lapangan</a>
+    @endcan
+
+    @can('view users')
+        <a href="{{ route('users.index') }}" class="btn btn-primary mb-2">Daftar User</a>
+    @endcan
     
     <form action="{{ route('logout') }}" method="POST" class="d-inline">
         @csrf
@@ -36,23 +37,23 @@
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $lap->nama }}</td>
                     <td>{{ $lap->tanggal }}</td>
-                    @auth
-                        @if(auth()->user()->role == 'admin')
-                            <td class="d-flex gap-1 justify-content-center">
-                                <a href="{{ route('lapangan.edit', $lap) }}" class="btn btn-sm btn-warning">Ubah</a>
-                                <form action="{{ route('lapangan.destroy', $lap) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" onclick="return confirm('Anda Yakin Hapus List Ini?')" class="btn btn-sm btn-danger">Hapus</button>
-                                </form>
-                                <a href="{{ route('lapangan.show', $lap) }}" class="btn btn-sm btn-primary">Show</a>
-                            </td>
-                        @else
-                            <td>
-                                <a href="{{ route('lapangan.show', $lap) }}" class="btn btn-sm btn-primary">Lihat Jadwal</a>
-                            </td>
-                        @endif
-                    @endauth
+                    <td class="d-flex gap-1 justify-content-center">
+                        @can('edit lapangan')
+                            <a href="{{ route('lapangan.edit', $lap) }}" class="btn btn-sm btn-warning">Ubah</a>
+                        @endcan
+
+                        @can('delete lapangan')
+                            <form action="{{ route('lapangan.destroy', $lap) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" onclick="return confirm('Anda Yakin Hapus List Ini?')" class="btn btn-sm btn-danger">Hapus</button>
+                            </form>
+                        @endcan
+
+                        @can('view lapangan')
+                            <a href="{{ route('lapangan.show', $lap) }}" class="btn btn-sm btn-primary">Show</a>
+                        @endcan
+                    </td>
                 </tr>
             @endforeach
         </tbody>

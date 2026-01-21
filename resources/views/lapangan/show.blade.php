@@ -10,13 +10,13 @@
         </div>
     </div>
 
-    @auth
+    @can('create jadwal')
         <div class="mb-3">
             <a href="{{ route('jadwal.create', $lapangan) }}" class="btn btn-primary">
                 Tambah Jadwal Baru
             </a>
         </div>
-    @endauth
+    @endcan
 
     @if($jadwal->count() > 0)
         <table class="table">
@@ -38,15 +38,22 @@
                     <td>{{ substr($jad->jam_berhenti, 0, 5) }}</td>
                     <td nowrap>
                         @auth
-                            @if(auth()->user()->role == 'admin' || auth()->user()->id == $jad->user_id)
-                                <a href="{{ route('jadwal.edit', [$lapangan, $jad]) }}" class="btn btn-primary btn-sm">Ubah</a>
+                            @if(auth()->user()->hasRole('admin') || auth()->user()->id == $jad->user_id)
+                                @can('edit jadwal')
+                                    <a href="{{ route('jadwal.edit', [$lapangan, $jad]) }}" class="btn btn-primary btn-sm">Ubah</a>
+                                @endcan
                                 
-                                <form action="{{ route('jadwal.destroy', [$lapangan, $jad]) }}" method="POST" style="display: inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" 
-                                            onclick="return confirm('Hapus jadwal ini?')">Hapus</button>
-                                </form>
+                                @can('delete jadwal')
+                                    <form action="{{ route('jadwal.destroy', [$lapangan, $jad]) }}" method="POST" style="display: inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Hapus jadwal ini?')">Hapus</button>
+                                    </form>
+                                @endcan
+
+                                @if(!(auth()->user()->can('edit jadwal')) && !(auth()->user()->can('delete jadwal')))
+                                    <span class="text-muted">Tidak bisa edit</span>
+                                @endif
                             @else
                                 <span class="text-muted">Tidak bisa edit</span>
                             @endif
