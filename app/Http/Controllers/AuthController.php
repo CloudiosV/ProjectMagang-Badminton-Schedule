@@ -51,10 +51,10 @@ class AuthController extends Controller
             'nama' => $request->nama,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'user',
         ]);
 
         // Auth::login($user);
+        $user->assignRole('user');
 
         return redirect()->route('loginForm')->with('success', 'Registrasi berhasil');
     }
