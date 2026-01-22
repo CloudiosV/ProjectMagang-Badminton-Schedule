@@ -23,9 +23,6 @@ class AuthController extends Controller
 
         if (Auth::attempt($request->only(['email', 'password']))) {
             $request->session()->regenerate();
-            if(Auth::user()->role == 'admin'){
-                return redirect()->route('lapangan.index')->with('success', 'Berhasil Login');
-            }
             return redirect()->route('lapangan.index')->with('success', 'Berhasil Login');
         }
 
