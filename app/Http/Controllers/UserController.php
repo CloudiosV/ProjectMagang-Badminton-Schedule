@@ -16,7 +16,7 @@ class UserController extends Controller
             abort(403, 'Unathorized action.');
         }
 
-        $users = User::with('roles')->latest()->paginate(10);
+        $users = User::with('roles')->latest()->get();
         return view('users.index', compact('users'));
     }
 
