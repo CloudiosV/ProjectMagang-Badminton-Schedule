@@ -1,64 +1,97 @@
 @extends('layouts.app')
 
-@section('title', 'Admin Dashboard')
+@section('title', 'Daftar Lapangan')
+@section('header', 'Daftar Lapangan')
+@section('breadcrumb', 'Lapangan')
 
 @section('content')
-
-    @section('header', 'Daftar Lapangan')
-
+<div class="row">
     @can('create lapangan')
-        <a href="{{ route('lapangan.create') }}" class="btn btn-primary mb-2">Tambah Lapangan</a>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-success text-white mb-4">
+                <a href="{{ route('lapangan.create') }}" class="card-body text-decoration-none text-light d-block">
+                    <div class="text-center">
+                        <i class="fas fa-plus-circle fa-2x mb-2"></i>
+                        <h5>Tambah Lapangan</h5>
+                    </div>
+                </a>
+            </div>
+        </div>
     @endcan
 
     @can('view users')
-        <a href="{{ route('users.index') }}" class="btn btn-primary mb-2">Daftar User</a>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-primary text-white mb-4">
+                <a href="{{ route('users.index') }}" class="card-body text-decoration-none text-light d-block">
+                    <div class="text-center">
+                        <i class="fas fa-users fa-2x mb-2"></i>
+                        <h5>Daftar User</h5>
+                    </div>
+                </a>
+            </div>
+        </div>
     @endcan
-    
-    <form action="{{ route('logout') }}" method="POST" class="d-inline">
-        @csrf
-        <button type="submit" class="btn btn-danger mb-2">
-            Logout
-        </button>
-    </form>
-    
-    <table class="table">
-        <thead class="table-dark">
-            <tr class="text-center">
-                <td>No</td>
-                <td>Nama Lapangan</td>
-                <td>Tanggal</td>
-                <td>Aksi</td>
-            </tr>
-        </thead>
+</div>
 
-        <tbody>
-            @foreach ($lapangan as $lap)
-                <tr class="text-center">
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $lap->nama }}</td>
-                    <td>{{ $lap->tanggal }}</td>
-                    <td class="d-flex gap-1 justify-content-center">
-                        @can('edit lapangan')
-                            <a href="{{ route('lapangan.edit', $lap) }}" class="btn btn-sm btn-warning">Ubah</a>
-                        @endcan
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        Daftar Lapangan
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="datatablesSimple" class="table table-bordered table-hover">
+                <thead>
+                    <tr class="text-center">
+                        <th width="5%">No</th>
+                        <th>Nama Lapangan</th>
+                        <th width="15%">Tanggal</th>
+                        <th width="20%">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($lapangan as $lap)
+                        <tr class="text-center align-middle">
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $lap->nama }}</td>
+                            <td>{{ \Carbon\Carbon::parse($lap->tanggal)->format('d-m-Y') }}</td>
+                            <td>
+                                <div class="d-flex gap-1 justify-content-center">
+                                    @can('view jadwal')
+                                        <a href="{{ route('lapangan.show', $lap) }}" class="btn btn-sm btn-primary" title="Lihat">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    @endcan
+                                    
+                                    @can('edit lapangan')
+                                        <a href="{{ route('lapangan.edit', $lap) }}" class="btn btn-sm btn-warning" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    @endcan
 
-                        @can('delete lapangan')
-                            <form action="{{ route('lapangan.destroy', $lap) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" onclick="return confirm('Anda Yakin Hapus List Ini?')" class="btn btn-sm btn-danger">Hapus</button>
-                            </form>
-                        @endcan
+                                    @can('delete lapangan')
+                                        <form action="{{ route('lapangan.destroy', $lap) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" 
+                                                    onclick="return confirm('Apakah Anda yakin ingin menghapus lapangan ini?')" 
+                                                    class="btn btn-sm btn-danger" 
+                                                    title="Hapus">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    @endcan
 
-                        @can('view lapangan')
-                            <a href="{{ route('lapangan.show', $lap) }}" class="btn btn-sm btn-primary">Show</a>
-                        @endcan
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-
-    {{ $lapangan->links() }}
-
+                                    @if (!(auth()->user()->can('view jadwal')) && !(auth()->user()->can('edit lapangan')) && !(auth()->user()->can('delete lapangan')))
+                                        <span class="text-muted">Tidak bisa edit</span>
+                                    @endif
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 @endsection
