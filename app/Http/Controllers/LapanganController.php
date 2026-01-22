@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Jadwal;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Lapangan;
 
@@ -11,10 +12,14 @@ class LapanganController extends Controller
     public function index()
     {
         if(!auth()->user()->can('view lapangan')){
-            abort(403, 'Unauthorized action.');
+            if(auth()->user()->can('view users')){
+                return redirect('users');
+            }else{
+                abort(403, 'Unauthorized action.');
+            }
         }
-
-        $lapangan = Lapangan::paginate(5);
+                
+        $lapangan = Lapangan::all();
 
         // return response()->json([
         //     'success' => true,
@@ -64,7 +69,7 @@ class LapanganController extends Controller
             abort(403, 'Unauthorized action.');
         }
         
-        $jadwal = $lapangan->jadwal()->with('user')->orderBy('jam_mulai')->paginate(5);
+        $jadwal = $lapangan->jadwal()->with('user')->orderBy('jam_mulai')->get();
 
         // return response()->json([
         //     'success' => true,
