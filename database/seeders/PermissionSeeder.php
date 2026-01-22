@@ -37,9 +37,24 @@ class PermissionSeeder extends Seeder
         }
         
         $adminRole = Role::create(['name' => 'admin', 'guard_name' => 'web']);
+        $managerRole = Role::create(['name' => 'manager', 'guard_name' => 'web']);
         $userRole = Role::create(['name' => 'user', 'guard_name' => 'web']);
         
         $adminRole->syncPermissions(Permission::all());
+
+        $managerPermissions = Permission::whereIn('name', [
+            'view lapangan', 'create lapangan', 'edit lapangan', 'delete lapangan',
+            'view jadwal', 'create jadwal', 'edit jadwal', 'delete jadwal'
+        ])->get();
+
+        $managerRole->syncPermissions($managerPermissions);
+
+        $userPermissions = Permission::whereIn('name', [
+            'view lapangan',
+            'view jadwal', 'create jadwal', 'edit jadwal', 'delete jadwal' // khusus user dia cuman bisa crud jadwal dia sendiri
+        ])->get();
+
+        $userRole->syncPermissions($userPermissions);
         
         \App\Models\User::create([
             'nama' => 'Admin',
