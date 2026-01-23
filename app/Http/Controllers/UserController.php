@@ -12,7 +12,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        if(!auth()->user()->can('view users')){
+        if(!(auth()->user()->can('view users')) || !(auth()->user()->hasRole('admin'))){
             abort(403, 'Unathorized action.');
         }
 

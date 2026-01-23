@@ -61,7 +61,7 @@
                             <td>
                                 <div class="d-flex gap-1 justify-content-center">
                                     @auth
-                                        @if(auth()->user()->hasRole('admin') || auth()->user()->id == $jad->user_id)
+                                        @if(auth()->user()->hasAnyRole(['admin', 'manager']) || auth()->user()->id == $jad->user_id)
                                             @can('edit jadwal')
                                                 <a href="{{ route('jadwal.edit', [$lapangan, $jad]) }}" 
                                                    class="btn btn-sm btn-warning" title="Edit">
