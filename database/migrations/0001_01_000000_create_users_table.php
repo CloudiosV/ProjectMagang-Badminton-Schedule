@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('password');
             // $table->foreignId('role_id')->constrained('roles')->onDelete('cascade');
             $table->rememberToken();
+            $table->softDeletes('deleted_at', 0);
             $table->timestamps();
         });
 
