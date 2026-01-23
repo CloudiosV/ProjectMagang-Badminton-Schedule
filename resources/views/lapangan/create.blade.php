@@ -17,7 +17,7 @@
             <div class="mb-3">
                 <label for="nama" class="form-label">Nama Lapangan</label>
                 <input type="text" id="nama" name="nama" value="{{ old('nama') }}" 
-                       class="form-control @error('nama') is-invalid @enderror" required>
+                       class="form-control @error('nama') is-invalid @enderror" placeholder="example: Lapangan A" required>
                 @error('nama')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
