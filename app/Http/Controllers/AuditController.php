@@ -19,4 +19,15 @@ class AuditController extends Controller
             
         return view('audits.index', compact('audits'));
     }
+    
+    public function show($id)
+    {
+        if(!auth()->user()->hasRole('super-admin')) {
+            abort(403, 'Unauthorized action.');
+        }
+        
+        $audit = Audit::with('user')->findOrFail($id);
+        
+        return view('audits.show', compact('audit'));
+    }
 }
