@@ -2,7 +2,7 @@
 
 @section('title', 'Daftar Lapangan')
 @section('header', 'Daftar Lapangan')
-@section('breadcrumb', 'Lapangan')
+@section('breadcrumb', 'Lapangan')  
 
 @section('content')
 <div class="row">
@@ -13,19 +13,6 @@
                     <div class="text-center">
                         <i class="fas fa-plus-circle fa-2x mb-2"></i>
                         <h5>Tambah Lapangan</h5>
-                    </div>
-                </a>
-            </div>
-        </div>
-    @endcan
-
-    @can('view users')
-        <div class="col-xl-3 col-md-6">
-            <div class="card bg-primary text-white mb-4">
-                <a href="{{ route('users.index') }}" class="card-body text-decoration-none text-light d-block">
-                    <div class="text-center">
-                        <i class="fas fa-users fa-2x mb-2"></i>
-                        <h5>Daftar User</h5>
                     </div>
                 </a>
             </div>

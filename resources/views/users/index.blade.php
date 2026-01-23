@@ -6,19 +6,6 @@
 
 @section('content')
 <div class="row mb-4">
-    @can('view lapangan')
-        <div class="col-xl-3 col-md-6">
-            <div class="card bg-primary text-white mb-4">
-                <a href="{{ route('lapangan.index') }}" class="card-body text-decoration-none text-light d-block">
-                    <div class="text-center">
-                        <i class="fas fa-table me-1 fa-2x mb-2"></i>
-                        <h5>Daftar Lapangan</h5>
-                    </div>
-                </a>
-            </div>
-        </div>
-    @endcan
-
     @can('create users')
         <div class="col-xl-3 col-md-6">
             <div class="card bg-success text-white mb-4">
