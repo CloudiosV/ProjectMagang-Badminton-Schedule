@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('lapangan_id')->constrained('lapangan')->onDelete('cascade');
             $table->time('jam_mulai');
             $table->time('jam_berhenti');
-
+            $table->softDeletes('deleted_at', 0);
             $table->timestamps();
         });
     }
