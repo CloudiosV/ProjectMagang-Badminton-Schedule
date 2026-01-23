@@ -40,16 +40,7 @@
                             </span>
                         </td>
                         <td>{{ $audit->auditable_type }}</td>
-                        {{-- <td>
-                            <small>
-                                @if($audit->old_values)
-                                    <strong>Old:</strong> {{ json_encode($audit->old_values) }}<br>
-                                @endif
-                                @if($audit->new_values)
-                                    <strong>New:</strong> {{ json_encode($audit->new_values) }}
-                                @endif
-                            </small>
-                        </td> --}}
+ac --}}
                         <td>{{ $audit->ip_address }}</td>
                         <td>{{ $audit->created_at->format('Y-m-d H:i:s') }}</td>
                         <td>
