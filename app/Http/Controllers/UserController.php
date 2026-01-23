@@ -12,7 +12,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        if(!(auth()->user()->can('view users')) || !(auth()->user()->hasRole('admin'))){
+        if(!(auth()->user()->can('view users')) || !(auth()->user()->hasRole(['admin', 'super-admin']))){
             abort(403, 'Unathorized action.');
         }
 
@@ -23,13 +23,18 @@ class UserController extends Controller
     public function create()
     {
         if(!auth()->user()->can('create users')){
-            abort(403, 'Unathorized action.');
+            abort(403, 'Unauthorized action.');
         }
 
-        $roles = Role::all();
+        $roles = Role::with('permissions')->get();
         $permissions = Permission::all();
 
-        return view('users.create', compact('roles', 'permissions'));
+        $rolePermissions = [];
+        foreach ($roles as $role) {
+            $rolePermissions[$role->name] = $role->permissions->pluck('name')->toArray();
+        }
+
+        return view('users.create', compact('roles', 'permissions', 'rolePermissions'));
     }
 
     public function store(Request $request)
@@ -67,15 +72,20 @@ class UserController extends Controller
     public function edit(User $user)
     {
         if(!auth()->user()->can('edit users')){
-            abort(403, 'Unathorized action.');
+            abort(403, 'Unauthorized action.');
         }
         
-        $roles = Role::all();
+        $roles = Role::with('permissions')->get();
         $permissions = Permission::all();
         $userRoles = $user->roles->pluck('name')->toArray();
         $userPermissions = $user->permissions->pluck('id')->toArray();
         
-        return view('users.edit', compact('user', 'roles', 'permissions', 'userRoles', 'userPermissions'));
+        $rolePermissions = [];
+        foreach ($roles as $role) {
+            $rolePermissions[$role->name] = $role->permissions->pluck('name')->toArray();
+        }
+        
+        return view('users.edit', compact('user', 'roles', 'permissions', 'userRoles', 'userPermissions', 'rolePermissions'));
     }
     
     public function update(Request $request, User $user)
