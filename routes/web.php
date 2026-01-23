@@ -67,5 +67,6 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('/audits')->name('audits.')->group(function () {
         Route::get('/', [AuditController::class, 'index'])->name('index');
+        Route::get('/{audit}', [AuditController::class, 'show'])->name('show');
     });
 });
