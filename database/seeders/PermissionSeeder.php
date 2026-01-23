@@ -27,6 +27,11 @@ class PermissionSeeder extends Seeder
             ['name' => 'create jadwal'],
             ['name' => 'edit jadwal'],
             ['name' => 'delete jadwal'],
+
+            ['name' => 'view roles'],
+            ['name' => 'create roles'],
+            ['name' => 'edit roles'],
+            ['name' => 'delete roles'],
         ];
         
         foreach ($permissions as $permission) {
@@ -35,10 +40,13 @@ class PermissionSeeder extends Seeder
                 'guard_name' => 'web'
             ]);
         }
-        
+
+        $superAdminRole = Role::create(['name' => 'super-admin', 'guard_name' => 'web']);
         $adminRole = Role::create(['name' => 'admin', 'guard_name' => 'web']);
         $managerRole = Role::create(['name' => 'manager', 'guard_name' => 'web']);
         $userRole = Role::create(['name' => 'user', 'guard_name' => 'web']);
+        
+        $superAdminRole->syncPermissions(Permission::all());
         
         $adminRole->syncPermissions(Permission::all());
 
@@ -57,9 +65,9 @@ class PermissionSeeder extends Seeder
         $userRole->syncPermissions($userPermissions);
         
         \App\Models\User::create([
-            'nama' => 'Admin',
-            'email' => 'admin@gmail.com',
-            'password' => \Illuminate\Support\Facades\Hash::make('admin123'),
-        ])->assignRole('admin');
+            'nama' => 'SuperAdmin',
+            'email' => 'superadmin@gmail.com',
+            'password' => \Illuminate\Support\Facades\Hash::make('superadmin123'),
+        ])->assignRole('super-admin');
     }
 }
