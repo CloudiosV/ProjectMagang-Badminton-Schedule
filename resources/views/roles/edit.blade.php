@@ -2,6 +2,7 @@
 
 @section('title', 'Edit Role')
 @section('header', 'Edit Role')
+@section('breadcrumb', 'Edit Role')
 
 @section('content')
 <div class="card">
