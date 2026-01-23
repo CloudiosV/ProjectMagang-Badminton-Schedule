@@ -87,10 +87,19 @@ class RoleController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        if(in_array($role->name, ['admin', 'user', 'manager'])) {
+        if(in_array($role->name, ['admin', 'user', 'manager', 'super-admin'])) {
             return redirect()->route('roles.index')->with('error', 'Tidak dapat menghapus role default');
         }
 
+        $originalName = $role->name;
+
+        $count = Role::withTrashed()
+            ->where('name', 'like', $originalName . '-deleted-%')
+            ->count();
+
+        $role->name = $originalName . '-deleted-' . ($count + 1);
+
+        $role->save();
         $role->delete();
         return redirect()->route('roles.index')->with('success', 'Role berhasil dihapus');
     }
