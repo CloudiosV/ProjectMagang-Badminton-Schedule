@@ -11,17 +11,20 @@
             
             <div class="mb-3">
                 <label for="nama" class="form-label">Nama</label>
-                <input type="text" name="nama" class="form-control" value="{{ old('nama') }}" required>
+                <input type="text" name="nama" class="form-control" value="{{ old('nama') }}" placeholder="Example" required>
             </div>
             
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" name="email" class="form-control" value="{{ old('email') }}" required>
+                <input type="email" name="email" class="form-control" value="{{ old('email') }}" placeholder="example@gmail.com" required>
             </div>
             
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" name="password" class="form-control" required>
+                <div class="input-group">
+                    <input type="password" name="password" id="password" class="form-control" placeholder="Enter Password" required>
+                    <button type="button" class="btn btn-outline-secondary" onclick="togglePassword()">👁</button>
+                </div>
             </div>
             
             <div class="mb-3">
@@ -57,14 +60,15 @@
 </div>
 
 <script>
+function togglePassword() {
+    var passInput = document.getElementById('password');
+    passInput.type = passInput.type === 'password' ? 'text' : 'password';
+}
+
 $(function(){
     $('#roles').select2({placeholder:"Pilih roles",allowClear:true,width:'100%'});
 
-    var rolePerms = {
-        admin: ['view users','create users','edit users','delete users','view lapangan','create lapangan','edit lapangan','delete lapangan','view jadwal','create jadwal','edit jadwal','delete jadwal'],
-        manager: ['view lapangan','create lapangan','edit lapangan','delete lapangan','view jadwal','create jadwal','edit jadwal','delete jadwal'],
-        user: ['view lapangan','view jadwal','create jadwal','edit jadwal','delete jadwal']
-    };
+    var rolePerms = @json($rolePermissions);
     
     $('#roles').change(function(){
         var roles = $(this).val()||[];
@@ -78,5 +82,6 @@ $(function(){
         });
     });
 });
+</script>
 </script>
 @endsection

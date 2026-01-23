@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\AuditController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\LapanganController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -51,5 +53,19 @@ Route::middleware('auth')->group(function () {
         Route::post('/', [UserController::class, 'store'])->name('store');
         Route::put('/{user}', [UserController::class, 'update'])->name('update');
         Route::delete('/{user}', [UserController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('/roles')->name('roles.')->group(function () {
+        Route::get('/', [RoleController::class, 'index'])->name('index');
+        Route::get('/create', [RoleController::class, 'create'])->name('create');
+        Route::get('/{role}/edit', [RoleController::class, 'edit'])->name('edit');
+
+        Route::post('/', [RoleController::class, 'store'])->name('store');
+        Route::put('/{role}', [RoleController::class, 'update'])->name('update');
+        Route::delete('/{role}', [RoleController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('/audits')->name('audits.')->group(function () {
+        Route::get('/', [AuditController::class, 'index'])->name('index');
     });
 });
