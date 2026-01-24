@@ -40,7 +40,6 @@
                             </span>
                         </td>
                         <td>{{ $audit->auditable_type }}</td>
-ac --}}
                         <td>{{ $audit->ip_address }}</td>
                         <td>{{ $audit->created_at->format('Y-m-d H:i:s') }}</td>
                         <td>
