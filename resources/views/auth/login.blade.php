@@ -17,9 +17,12 @@
 				</div>
 			</div>
 			<div class="row justify-content-center">
-				<div class="col-md-6 col-lg-4">
-					<div class="login-wrap p-0">
+                <div class="col-md-6 col-lg-4">
+                    <div class="login-wrap p-0">
                         <h3 class="mb-4 text-center">Have an account?</h3>
+                        @if ($errors->any())
+                            <p class="text-danger text-center">{{ $errors->first() }}</p>
+                        @endif
                         <form action="{{ route('login') }}" class="signin-form" method="POST">
                             @csrf
 

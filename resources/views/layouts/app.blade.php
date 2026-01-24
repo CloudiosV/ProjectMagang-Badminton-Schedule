@@ -84,6 +84,9 @@
             </div>
             <div id="layoutSidenav_content">
                 <main>
+                    <div>
+                        <x-flash-message />
+                    </div>
                     <div class="container-fluid px-4">
                         <h1 class="mt-4">@yield('header', 'Dashboard')</h1>
                         <ol class="breadcrumb mb-4">
@@ -110,5 +113,13 @@
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="{{ asset('js/sb-admin.js') }}"></script>
         @stack('scripts')
+
+        <script>
+            setTimeout(() => {
+                document.querySelectorAll('.alert').forEach(alert => {
+                    alert.remove();
+                });
+            }, 3000);
+        </script>
     </body>
 </html>
