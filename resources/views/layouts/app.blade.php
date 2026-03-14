@@ -109,17 +109,79 @@
                 </footer>
             </div>
         </div>
+
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#aiModal" style="position:fixed;bottom:20px;right:20px;z-index:9999">
+            💬 AI Help
+        </button>
+
+        <div class="modal fade" id="aiModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5>AI Support</h5>
+                        <button class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div id="chatBox" style="height:300px;overflow:auto"></div>
+
+                        <input type="text"
+                            id="chatInput"
+                            class="form-control mt-2"
+                            placeholder="Tanya sesuatu...">
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="{{ asset('js/sb-admin.js') }}"></script>
         @stack('scripts')
 
         <script>
-            setTimeout(() => {
-                document.querySelectorAll('.alert').forEach(alert => {
-                    alert.remove();
-                });
-            }, 3000);
-        </script>
+setTimeout(() => {
+    document.querySelectorAll('.alert').forEach(alert => {
+        alert.remove();
+    });
+}, 3000);
+
+$(document).ready(function(){
+
+    $('#chatInput').on('keypress', function(e){
+
+    if(e.which === 13){
+
+        let msg = $(this).val();
+
+        if(msg.trim() === '') return;
+
+        $('#chatBox').append('<div>🧑 '+msg+'</div>');
+
+        $.ajax({
+            url: '/ai/chat',
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                message: msg
+            },
+            success: function(res){
+
+                $('#chatBox').append('<div>🤖 '+res.text+'</div>');
+                $('#chatBox').scrollTop($('#chatBox')[0].scrollHeight);
+
+            },
+            error: function(xhr){
+
+                console.log(xhr.responseText);
+                $('#chatBox').append('<div>🤖 Error server</div>');
+            }
+        });
+
+        $('#chatInput').val('');
+    }
+});
+});
+</script>
     </body>
 </html>
