@@ -22,7 +22,7 @@ class AIController extends Controller
         } catch (\Throwable $e) {
 
             return response()->json([
-                'text' => 'AI sedang error 😅'
+                'text' => 'AI is having an error'
             ]);
         }
     }
