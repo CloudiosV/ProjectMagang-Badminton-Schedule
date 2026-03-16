@@ -110,29 +110,44 @@
             </div>
         </div>
 
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#aiModal" style="position:fixed;bottom:20px;right:20px;z-index:9999">
-            💬 AI Help
-        </button>
+<!-- FLOAT BUTTON -->
+<button class="btn btn-primary rounded-circle shadow"
+    id="openAiChat"
+    style="position:fixed; bottom:20px; right:20px; width:60px; height:60px; z-index:9999;">
+    💬
+</button>
 
-        <div class="modal fade" id="aiModal">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5>AI Support</h5>
-                        <button class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
+<!-- CHAT BOX -->
+<div id="aiChatWidget" class="card shadow"
+    style="position:fixed; bottom:90px; right:20px; width:350px; display:none; z-index:9999;">
 
-                    <div class="modal-body">
-                        <div id="chatBox" style="height:300px;overflow:auto"></div>
+    <!-- HEADER -->
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <span>AI Helper</span>
+        <button class="btn btn-sm btn-light" id="closeAiChat">✕</button>
+    </div>
 
-                        <input type="text"
-                            id="chatInput"
-                            class="form-control mt-2"
-                            placeholder="Tanya sesuatu...">
-                    </div>
-                </div>
-            </div>
+    <!-- CHAT BODY -->
+    <div id="chatBox"
+        class="card-body"
+        style="height:300px; overflow-y:auto; background:#f8f9fa;">
+    </div>
+
+    <!-- INPUT -->
+    <div class="card-footer">
+        <div class="input-group">
+            <input type="text"
+                id="chatInput"
+                class="form-control"
+                placeholder="Tanya sesuatu...">
+
+            <button class="btn btn-primary" id="sendChat">
+                Send
+            </button>
         </div>
+    </div>
+
+</div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
@@ -148,39 +163,85 @@ setTimeout(() => {
 
 $(document).ready(function(){
 
-    $('#chatInput').on('keypress', function(e){
+    // buka chat
+    $('#openAiChat').click(function(){
+        $('#aiChatWidget').toggle();
+    });
 
-    if(e.which === 13){
+    // tutup chat
+    $('#closeAiChat').click(function(){
+        $('#aiChatWidget').hide();
+    });
 
-        let msg = $(this).val();
+    // function kirim chat
+    function sendMessage(){
+
+        let msg = $('#chatInput').val();
 
         if(msg.trim() === '') return;
 
-        $('#chatBox').append('<div>🧑 '+msg+'</div>');
+        // bubble user
+        $('#chatBox').append(
+            '<div class="d-flex justify-content-end mb-2">' +
+                '<div class="bg-primary text-white p-2 rounded" style="max-width:70%;">'
+                    + msg +
+                '</div>' +
+            '</div>'
+        );
 
+        // loading ai
+        $('#chatBox').append(
+            '<div id="loading" class="mb-2">' +
+            '<span class="badge bg-secondary p-2">AI mengetik...</span>' +
+            '</div>'
+        );
+
+        // ajax ke laravel
         $.ajax({
-            url: '/ai/chat',
-            method: 'POST',
-            data: {
-                _token: '{{ csrf_token() }}',
-                message: msg
+            url:'/ai/chat',
+            method:'POST',
+            data:{
+                _token:'{{ csrf_token() }}',
+                message:msg
             },
-            success: function(res){
+            success:function(res){
 
-                $('#chatBox').append('<div>🤖 '+res.text+'</div>');
+                $('#loading').remove();
+
+                // bubble ai
+                $('#chatBox').append(
+                    '<div class="d-flex mb-2">' +
+                        '<div class="bg-dark text-white p-2 rounded" style="max-width:70%;">'
+                            + res.text +
+                        '</div>' +
+                    '</div>'
+                );
+
                 $('#chatBox').scrollTop($('#chatBox')[0].scrollHeight);
-
             },
-            error: function(xhr){
+            error:function(xhr){
 
-                console.log(xhr.responseText);
-                $('#chatBox').append('<div>🤖 Error server</div>');
+                $('#loading').remove();
+
+                $('#chatBox').append(
+                    '<div class="mb-2 text-danger">Server error</div>'
+                );
             }
         });
 
         $('#chatInput').val('');
     }
-});
+
+    // tombol send
+    $('#sendChat').click(sendMessage);
+
+    // enter kirim
+    $('#chatInput').keypress(function(e){
+        if(e.which === 13){
+            sendMessage();
+        }
+    });
+
 });
 </script>
     </body>
