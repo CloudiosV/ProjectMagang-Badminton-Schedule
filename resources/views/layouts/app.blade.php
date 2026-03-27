@@ -14,6 +14,7 @@
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <meta name="csrf-token" content="{{ csrf_token() }}">
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -74,6 +75,10 @@
                                     Audits
                                 </a>
                             @endrole
+
+                            <a class="nav-link" href="{{ route('fingerprint.index') }}">
+                                <i class="fas fa-fingerprint"></i> Fingerprint
+                            </a>
                         </div>
                     </div>
                     <div class="sb-sidenav-footer">
