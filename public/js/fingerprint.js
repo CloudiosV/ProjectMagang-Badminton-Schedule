@@ -6,7 +6,7 @@ document.getElementById('btn-enroll').addEventListener('click', async function()
         alert("Pilih karyawan dulu!");
         return;
     }
-    statusMessage.innerText = "Alat menyala. Silakan tempelkan jari yang sama 3 kali...";
+    statusMessage.innerText = "Silakan tempelkan jari yang sama 3 kali...";
     statusMessage.style.color = "orange";
     
     try {
@@ -82,8 +82,8 @@ document.getElementById('btn-verify').addEventListener('click', async function()
         }
         const registeredFPString = FPData.fingerprint_string;
 
-        statusMessage.innerText = "Alat menyala. Silakan tempelkan jari 3 kali...";
-        const captureResponse = await fetch('http://localhost:8080/enroll', { method: 'POST' });
+        statusMessage.innerText = "Silakan tempelkan jari ...";
+        const captureResponse = await fetch('http://localhost:8080/capture', { method: 'POST' });
         const captureFPData = await captureResponse.json();
 
         if (captureFPData.error) {
@@ -149,8 +149,8 @@ document.getElementById('btn-identify').addEventListener('click', async function
 
         const allFingerprints = FPData.fingerprint_list;
 
-        statusMessage.innerText = "Alat menyala. Silakan tempelkan jari untuk Absen...";
-        const captureResponse = await fetch('http://localhost:8080/enroll', { method: 'POST' });
+        statusMessage.innerText = "Silakan tempelkan jari untuk Absen...";
+        const captureResponse = await fetch('http://localhost:8080/capture', { method: 'POST' });
         const captureFPData = await captureResponse.json();
 
         if (captureFPData.error) {
